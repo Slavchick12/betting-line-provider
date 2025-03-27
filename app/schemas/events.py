@@ -10,6 +10,7 @@ from app.utils.enums import EventStatusEnum
 
 class Event(BaseModel):
     uuid: UUID
+    name: str
     odds: Annotated[float, Field(gt=0)]
     deadline: Annotated[int, Field(gte=0)]
     status: EventStatusEnum

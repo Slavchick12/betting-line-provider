@@ -48,7 +48,6 @@ class EventCRUD:
         return updated_event_obj
 
     @classmethod
-    async def delete(cls, uuid: UUID) -> None:
+    async def delete(cls, uuid: UUID) -> int:
         async with get_redis_connection() as client:
-            event = await client.delete(str(uuid))
-        return event
+            return await client.delete(str(uuid))
