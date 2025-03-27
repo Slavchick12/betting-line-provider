@@ -1,11 +1,10 @@
 """Service for event model."""
 
 from random import uniform
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from app.schemas.events import Event, EventCreate, EventUpdate
 from app.db.connection import get_redis_connection
-from uuid import uuid4
+from app.schemas.events import Event, EventCreate, EventUpdate
 
 
 class EventCRUD:

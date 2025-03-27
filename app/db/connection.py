@@ -1,8 +1,9 @@
 """Connection to database."""
 
+from contextlib import asynccontextmanager
+
 import aioredis
 
-from contextlib import asynccontextmanager
 from app.core.settings import settings
 
 

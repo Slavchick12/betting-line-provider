@@ -1,9 +1,11 @@
 """Views for events routers."""
 
-from fastapi import APIRouter, status, HTTPException
-from app.schemas.events import EventCreate, Event, EventUpdate
-from app.api.services.events import EventCRUD
 from uuid import UUID
+
+from fastapi import APIRouter, HTTPException, status
+
+from app.api.services.events import EventCRUD
+from app.schemas.events import Event, EventCreate, EventUpdate
 
 router = APIRouter()
 

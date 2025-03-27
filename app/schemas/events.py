@@ -1,8 +1,10 @@
 """Schemas for events."""
 
-from uuid import UUID
-from pydantic import BaseModel, Field, field_validator
 from typing import Annotated
+from uuid import UUID
+
+from pydantic import BaseModel, Field, field_validator
+
 from app.utils.enums import EventStatusEnum
 
 
