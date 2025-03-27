@@ -1,7 +1,9 @@
 """Service for event model."""
 
+import time
 from random import uniform
 from uuid import UUID, uuid4
+
 from app.db.connection import get_redis_connection
 from app.schemas.events import Event, EventCreate, EventUpdate
 
@@ -26,7 +28,11 @@ class EventCRUD:
                 cursor, current_keys = await client.scan(cursor=cursor, match='*')
                 keys.extend(current_keys)
 
-            return [Event.model_validate_json(await client.get(key))for key in keys]
+            return [
+                event_obj
+                for key in keys
+                if (event_obj := Event.model_validate_json(await client.get(key))).deadline > int(time.time())
+            ]
 
     @classmethod
     async def create(cls, event_input: EventCreate) -> Event:
