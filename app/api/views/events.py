@@ -10,6 +10,11 @@ from app.schemas.events import Event, EventCreate, EventUpdate
 router = APIRouter()
 
 
+@router.get('/', status_code=status.HTTP_200_OK, response_model=list[Event])
+async def get_event() -> list[Event]:
+    return await EventCRUD.list()
+
+
 @router.get('/{uuid}', status_code=status.HTTP_200_OK, response_model=Event)
 async def get_event(uuid: UUID) -> Event:
     if not (event_obj := await EventCRUD.get(uuid)):

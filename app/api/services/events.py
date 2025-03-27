@@ -2,7 +2,6 @@
 
 from random import uniform
 from uuid import UUID, uuid4
-
 from app.db.connection import get_redis_connection
 from app.schemas.events import Event, EventCreate, EventUpdate
 
@@ -17,6 +16,17 @@ class EventCRUD:
             return None
 
         return Event.model_validate_json(event)
+
+    @classmethod
+    async def list(cls) -> list[Event]:
+        async with get_redis_connection() as client:
+            cursor, keys = '0', []
+
+            while cursor != 0:
+                cursor, current_keys = await client.scan(cursor=cursor, match='*')
+                keys.extend(current_keys)
+
+            return [Event.model_validate_json(await client.get(key))for key in keys]
 
     @classmethod
     async def create(cls, event_input: EventCreate) -> Event:
