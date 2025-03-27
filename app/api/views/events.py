@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get('/', status_code=status.HTTP_200_OK, response_model=list[Event])
-async def get_event() -> list[Event]:
+async def list_event() -> list[Event]:
     return await EventCRUD.list()
 
 

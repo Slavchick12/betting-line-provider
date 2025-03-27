@@ -50,6 +50,7 @@ class EventCRUD:
         event_obj = Event.model_validate_json(event)
         updated_event_obj = Event(
             uuid=event_obj.uuid,
+            name=event_obj.name,
             odds=event_obj.odds,
             **event_input.model_dump(),
         )
