@@ -1,5 +1,5 @@
 services:
-  line_provider:
+  line-provider:
     build:
       context: ../..
       dockerfile: envs/dev/Dockerfile
@@ -10,6 +10,8 @@ services:
     volumes:
       - ../../app:/app
     restart: unless-stopped
+    networks:
+      - betting
 
   redis:
     image: mirror.gcr.io/redis:7.2.4
@@ -17,6 +19,13 @@ services:
     volumes:
       - redis:/root/redis
       - redis:/usr/local/etc/redis/redis.conf
+    networks:
+      - betting
+    
 
 volumes:
   redis:
+
+networks:
+  betting:
+    external: true
