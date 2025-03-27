@@ -9,5 +9,7 @@ class EventStatusEnum(str, Enum):
     scheduled = 'Scheduled'
     in_progress = 'In progress'
     half_time = 'Half time'
-    finished = 'Finished'
+    FIRST_WIN = 'First win'
+    SECON_WIN = 'Second win'
+    DRAW = 'Draw'
     canceled = 'Canceled'
