@@ -3,12 +3,22 @@
 from random import uniform
 from uuid import UUID
 
-from app.schemas.events import Event, EventCreate
+from app.schemas.events import Event, EventCreate, EventUpdate
 from app.db.connection import get_redis_connection
 from uuid import uuid4
 
 
 class EventCRUD:
+    @classmethod
+    async def get(cls, uuid: UUID) -> Event | None:
+        async with get_redis_connection() as client:
+            event = await client.get(str(uuid))
+
+        if not event:
+            return None
+
+        return Event.model_validate_json(event)
+
     @classmethod
     async def create(cls, event_input: EventCreate) -> Event:
         async with get_redis_connection() as client:
@@ -21,11 +31,19 @@ class EventCRUD:
         return event_obj
 
     @classmethod
-    async def get(cls, uuid: UUID) -> Event | None:
+    async def update(cls, uuid: UUID, event_input: EventUpdate) -> Event | None:
         async with get_redis_connection() as client:
             event = await client.get(str(uuid))
 
         if not event:
             return None
 
-        return Event.model_validate_json(event)
+        event_obj = Event.model_validate_json(event)
+        updated_event_obj = Event(
+            uuid=event_obj.uuid,
+            odds=event_obj.odds,
+            **event_input.model_dump(),
+        )
+        await client.set(str(updated_event_obj.uuid), updated_event_obj.model_dump_json())
+
+        return updated_event_obj
