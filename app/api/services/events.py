@@ -1,12 +1,25 @@
 """Service for event model."""
 
+from random import uniform
 from uuid import UUID
 
-from app.schemas.events import Event
+from app.schemas.events import Event, EventCreate
 from app.db.connection import get_redis_connection
+from uuid import uuid4
 
 
 class EventCRUD:
+    @classmethod
+    async def create(cls, event_input: EventCreate) -> Event:
+        async with get_redis_connection() as client:
+            event_obj = Event(
+                uuid=uuid4(),
+                odds=round(uniform(0, 10), 2),  # random because there has to be logic here
+                **event_input.model_dump(),
+            )
+            await client.set(str(event_obj.uuid), event_obj.model_dump_json())
+        return event_obj
+
     @classmethod
     async def get(cls, uuid: UUID) -> Event | None:
         async with get_redis_connection() as client:
