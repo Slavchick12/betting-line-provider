@@ -47,3 +47,9 @@ class EventCRUD:
         await client.set(str(updated_event_obj.uuid), updated_event_obj.model_dump_json())
 
         return updated_event_obj
+
+    @classmethod
+    async def delete(cls, uuid: UUID) -> None:
+        async with get_redis_connection() as client:
+            event = await client.delete(str(uuid))
+        return event

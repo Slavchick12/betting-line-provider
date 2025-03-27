@@ -25,3 +25,10 @@ async def update_event(uuid: UUID, event: EventUpdate) -> Event:
     if not (event_obj := await EventCRUD.update(uuid, event)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Not Found')
     return event_obj
+
+
+@router.delete('/{uuid}', status_code=status.HTTP_200_OK)
+async def delete_event(uuid: UUID) -> dict:
+    if not await EventCRUD.delete(uuid):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Not Found')
+    return {'detail': f'Event {uuid} was deleted'}
