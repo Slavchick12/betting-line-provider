@@ -17,7 +17,7 @@ class Event(BaseModel):
 
     @field_validator('odds')
     @classmethod
-    def check_value_length(cls, value: float) -> float:
+    def odds_validate(cls, value: float) -> float:
         return round(value, 2)
 
 
